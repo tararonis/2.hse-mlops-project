@@ -1,0 +1,6 @@
+links:
+  train_data: https://drive.google.com/uc?id=19cjWHo46R6_gW7jaLF8e8tSM-ohUB7aS
+  test_data: https://drive.google.com/uc?id=1Z3RCUqN12-n8NKR49UJ9BLU91jJl3V6x
+
+mlflow:
+  uri: http://128.0.1.1:8080
