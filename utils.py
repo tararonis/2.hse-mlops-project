@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import scipy
 from dvc.api import open
@@ -28,3 +30,12 @@ def load_data(path, remote) -> pd.DataFrame:
     with open(path, remote=remote) as f:
         df = pd.read_csv(f)
     return df
+
+
+def create_folder(dir_name) -> None:
+    """Создание папки
+
+    Args: dir_name (str): название директории
+    """
+    directory_path = Path("dir_name")
+    directory_path.mkdir(parents=True, exist_ok=True)

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import gdown
 import hydra
 import mlflow
@@ -13,14 +11,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
-from utils import convert_to_num_data
+from utils import convert_to_num_data, create_folder
 
 
 @hydra.main(config_path="config", config_name="config", version_base=None)
 def main(config: OmegaConf):
     # Создание папки
-    directory_path = Path("data")
-    directory_path.mkdir(parents=True, exist_ok=True)
+    create_folder("data")
     # Скачивание датасета с gdrive
     gdown.download(config.link.train_data, config.path.train_data, quiet=False)
     df = pd.read_csv("data/train_data.csv")
@@ -63,16 +60,13 @@ def main(config: OmegaConf):
         # Логгирование модели
         mlflow.sklearn.log_model(pipe, "decision_tree_model")
 
-        # Сохранение модели в формате ONNX
-        onnx_path = "models/decision_tree_model.onnx"
-
         # Преобразование модели scikit-learn в формат ONNX
         onnx_model = convert_sklearn(
             pipe, initial_types=[("input", ftp([None, tfidf.shape[1]]))]
         )
 
         # Сохранение ONNX модели
-        save_model(onnx_model, onnx_path)
+        save_model(onnx_model, config.path.model)
 
 
 if __name__ == "__main__":
