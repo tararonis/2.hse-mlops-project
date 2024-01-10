@@ -11,7 +11,7 @@ from utils import convert_to_num_data, create_folder
 @hydra.main(config_path="config", config_name="config", version_base=None)
 def main(config: OmegaConf):
     # Скачивание датасета с gdrive
-    gdown.download(config.links.test_data, config.path.test_data, quiet=False)
+    gdown.download(config.link.test_data, config.path.test_data, quiet=False)
     df = pd.read_csv(config.path.test_data)
 
     #  Преобразование текстовых данных в числовые
