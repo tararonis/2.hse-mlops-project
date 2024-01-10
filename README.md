@@ -21,15 +21,25 @@
 > Была взята задача бинарной классификация достоверности новостей Данные
 > получили из сооревнований Kaggle https://www.kaggle.com/c/fake-news/
 
-# Как начать работать
+# Как запустить проект
 
 - Склонировать репозиторий
+  > git clone https://github.com/tararonis/hse-mlops-project.git
 - Создать виртуальное окружение
-- Установить зависимости: poetry install
-- > pre-commit install
-- > pre-commit run -a
-- > python train.py
-- > python infer.py
+
+  > virtualenv venv
+
+  > source venv/bin/activate
+
+- Установить зависимости:
+  > poetry install
+- Запустить и проверить pre-commit
+  > pre-commit install pre-commit run -a
+- Создать и протестировать модель
+
+  > python train.py
+
+  > python infer.py
 
 # Какие инструменты необходимо использовать:
 
