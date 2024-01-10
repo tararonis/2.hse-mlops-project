@@ -37,5 +37,5 @@ def create_folder(dir_name) -> None:
 
     Args: dir_name (str): название директории
     """
-    directory_path = Path("dir_name")
+    directory_path = Path(dir_name)
     directory_path.mkdir(parents=True, exist_ok=True)
