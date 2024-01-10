@@ -1,6 +1,24 @@
-links:
-  train_data: https://drive.google.com/uc?id=19cjWHo46R6_gW7jaLF8e8tSM-ohUB7aS
-  test_data: https://drive.google.com/uc?id=1Z3RCUqN12-n8NKR49UJ9BLU91jJl3V6x
+dvc:
+  remote: storage
+  path: data/train_data.csv
+
+link:
+  train_data: https://drive.google.com/uc?id=1Z3RCUqN12-n8NKR49UJ9BLU91jJl3V6x
+  test_data: https://drive.google.com/uc?id=19cjWHo46R6_gW7jaLF8e8tSM-ohUB7aS
 
 mlflow:
   uri: http://128.0.1.1:8080
+
+imputer:
+  strategy: mean
+
+scaler:
+  with_mean: false
+
+classifier:
+  max_depth: 58
+  random_state: 42
+
+path:
+  train_data: data/train_data.csv
+  test_data: data/test_data.csv

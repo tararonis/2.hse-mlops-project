@@ -1,35 +1,34 @@
 from pathlib import Path
 
+import gdown
 import hydra
 import numpy as np
 import onnxruntime
 import pandas as pd
 from omegaconf import OmegaConf
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+
+from utils import convert_to_num_data
 
 
 @hydra.main(config_path="config", config_name="config", version_base=None)
 def main(config: OmegaConf):
     # Скачивание датасета с gdrive
-    # file_content = gdown.download(cfg.links.test_data, "hse-mlops-project/data2/test_data.csv", quiet=False)
-    df = pd.read_csv("data2/test_data.csv")
-
-    df.fillna(" ", inplace=True)
+    gdown.download(config.links.test_data, config.path.test_data, quiet=False)
+    df = pd.read_csv("data/test_data.csv")
 
     #  Преобразование текстовых данных в числовые
-    transformer = TfidfTransformer(smooth_idf=False)
-    count_vectorizer = CountVectorizer(ngram_range=(1, 2))
-    counts = count_vectorizer.fit_transform(df["content"].values)
-    tfidf = transformer.fit_transform(counts)
+    tfidf = convert_to_num_data(df).toarray()
+    tfidf = tfidf[:, :75541]
 
-    sess = onnxruntime.InferenceSession("models/decision_tree_model.onnx")
+    session = onnxruntime.InferenceSession("models/decision_tree_model.onnx")
+    input_name = session.get_inputs()[0].name
+    output_name = session.get_outputs()[0].name
 
-    input_data = {"input": tfidf.toarray().astype(np.float32).reshape(-1, 35786)}
     # Выполняем предсказание
-    output = sess.run(None, input_data)
+    pred = session.run([output_name], {input_name: tfidf.astype(np.float32)})
 
     # Преобразуем предсказания в DataFrame
-    predictions_df = pd.DataFrame(data=output[0], columns=["Prediction"])
+    predictions_df = pd.DataFrame(data=pred[0], columns=["Prediction"])
 
     # Сохраняем DataFrame в CSV файл
     directory_path = Path("data/tmp")
