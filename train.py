@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import gdown
 import hydra
 import mlflow
@@ -16,6 +18,9 @@ from utils import convert_to_num_data
 
 @hydra.main(config_path="config", config_name="config", version_base=None)
 def main(config: OmegaConf):
+    # Создание папки
+    directory_path = Path("data")
+    directory_path.mkdir(parents=True, exist_ok=True)
     # Скачивание датасета с gdrive
     gdown.download(config.link.train_data, config.path.train_data, quiet=False)
     df = pd.read_csv("data/train_data.csv")
